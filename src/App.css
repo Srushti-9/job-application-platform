@@ -4,3 +4,24 @@
   padding: 2rem;
   text-align: center;
 }
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.job-card {
+  margin: 10px;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.infinite-scroll {
+  height: 20px;
+}
