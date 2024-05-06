@@ -7,13 +7,14 @@ const InfiniteScroll = () => {
   const dispatch = useDispatch();
   const [isFetching, setIsFetching] = useState(false);
   const [page, setPage] = useState(1); // Track current page for pagination
-  const jobs = useSelector(state => state.jobs);
+  const jobs = useSelector((state) => state.jobs);
 
   const handleScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop !==
       document.documentElement.offsetHeight
-    ) return;
+    )
+      return;
     setIsFetching(true);
   };
 
@@ -30,6 +31,6 @@ const InfiniteScroll = () => {
   }, [isFetching, dispatch, page]);
 
   return <div className="infinite-scroll"></div>;
-}
+};
 
 export default InfiniteScroll;
