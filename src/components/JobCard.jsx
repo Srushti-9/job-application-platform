@@ -1,11 +1,5 @@
-import React,{useState} from 'react';
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Avatar,
-} from '@mui/material';
+import React, { useState } from 'react';
+import { Card, CardContent, Typography, Button, Avatar } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { styled } from '@mui/system';
 import JobDetailsDialog from './JobDetailsDialog';
@@ -17,6 +11,7 @@ const JobCardWrapper = styled(Card)(({ theme }) => ({
   width: 'calc(50% - 16px)',
   borderRadius: theme.spacing(2), // rounded corners
   boxShadow: theme.shadows[3],
+  justifyContent: 'space-between',
   [theme.breakpoints.up('md')]: {
     width: 'calc(33.3333% - 16px)',
     marginRight: theme.spacing(2),
@@ -63,7 +58,8 @@ const AboutCompany = styled(Typography)(({ theme }) => ({
 }));
 
 const ButtonContainer = styled('div')({
-  alignSelf: 'flex-end',
+  alignSelf: 'center',
+  padding: '10px',
 });
 
 const PostedContainer = styled('div')(({ theme }) => ({
@@ -88,7 +84,8 @@ const JobCard = ({ job }) => {
     jobRole,
     companyName,
     logoUrl,
-    salaryCurrencyCode
+    salaryCurrencyCode,
+    minExp,
   } = job;
 
   const [showFullDetails, setShowFullDetails] = useState(false);
@@ -102,70 +99,109 @@ const JobCard = ({ job }) => {
     setOpenDialog(false);
   };
 
+  const ExperienceContainer = styled('div')(({ theme }) => ({
+    marginTop: theme.spacing(1),
+    color: theme.palette.text.secondary, // Grey shade
+  }));
+
   return (
     <>
-    <JobCardWrapper variant="outlined">
-      <CardContentWrapper>
-        <InfoContainer>
-          <PostedContainer>
-            <AccessTimeIcon fontSize="small" style={{ fontSize: '0.7rem' }} />
+      <JobCardWrapper variant="outlined">
+        <CardContentWrapper>
+          <InfoContainer>
+            <PostedContainer>
+              <AccessTimeIcon fontSize="small" style={{ fontSize: '0.7rem' }} />
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                style={{ marginLeft: '4px', fontSize: '0.7rem' }}
+              >
+                Posted 3 days ago
+              </Typography>
+            </PostedContainer>
+          </InfoContainer>
+          <InfoContainer>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '8px',
+              }}
+            >
+              <AvatarWrapper alt={companyName} src={logoUrl} />
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <Typography variant="h5" component="h2">
+                  {jobRole}
+                </Typography>
+                <Typography variant="subtitle1" color="textSecondary">
+                  {companyName}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {location}
+                </Typography>
+              </div>
+            </div>
+            <SalaryRange variant="body2" color="textSecondary">
+              {minJdSalary !== null && maxJdSalary !== null
+                ? `Estimated Salary Range: ${minJdSalary} - ${maxJdSalary} ${salaryCurrencyCode}`
+                : minJdSalary !== null
+                  ? `Estimated Salary: ${minJdSalary} ${salaryCurrencyCode}`
+                  : maxJdSalary !== null
+                    ? `Estimated Salary: ${maxJdSalary} ${salaryCurrencyCode}`
+                    : 'Salary not available'}
+            </SalaryRange>
             <Typography
               variant="body2"
-              color="textSecondary"
-              style={{ marginLeft: '4px', fontSize: '0.7rem' }}
+              style={{ fontSize: '1rem', fontWeight: '500' }}
             >
-              Posted 3 days ago
+              About Company:
             </Typography>
-          </PostedContainer>
-        </InfoContainer>
-        <InfoContainer>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-          <AvatarWrapper alt={companyName} src={logoUrl} />
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography variant="h5" component="h2" >
-              {jobRole}
+            <Typography
+              variant="body2"
+              style={{ fontSize: '0.8rem', fontWeight: 'bold' }}
+            >
+              About Us:
             </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              {companyName}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {location}
-            </Typography>
-          </div>
-        </div>
-        <SalaryRange variant="body2" color="textSecondary">
-  {minJdSalary !== null && maxJdSalary !== null
-    ? `Estimated Salary Range: ${minJdSalary} - ${maxJdSalary} ${salaryCurrencyCode}`
-    : minJdSalary !== null
-    ? `Estimated Salary: ${minJdSalary} ${salaryCurrencyCode}`
-    : maxJdSalary !== null
-    ? `Estimated Salary: ${maxJdSalary} ${salaryCurrencyCode}`
-    : 'Salary not available'
-  }
-</SalaryRange>
-          <Typography variant="body2" style={{ fontSize: '1rem', fontWeight: '500'}}>About Company:</Typography>
-          <Typography variant="body2" style={{ fontSize: '0.8rem', fontWeight: 'bold'  }}>
-            About Us:
-          </Typography>
-          <AboutCompany variant="body2" color="textSecondary">
-              {showFullDetails ? jobDetailsFromCompany : `${jobDetailsFromCompany.slice(0, 100)}...`}
-              {!showFullDetails && <Button color="primary" onClick={handleDialogOpen}>Show More</Button>}
+            <AboutCompany variant="body2" color="textSecondary">
+              {showFullDetails
+                ? jobDetailsFromCompany
+                : `${jobDetailsFromCompany.slice(0, 100)}...`}
+              {!showFullDetails && (
+                <Button color="primary" onClick={handleDialogOpen}>
+                  Show More
+                </Button>
+              )}
             </AboutCompany>
-        </InfoContainer>
-      </CardContentWrapper>
-      <ButtonContainer>
-        <Button
-          variant="contained"
-          color="primary"
-          href={jdLink}
-          target="_blank"
-          style={{ marginTop: '8px' }}
-        >
-          Apply
-        </Button>
-      </ButtonContainer>
-    </JobCardWrapper>
-    <JobDetailsDialog open={openDialog} handleClose={handleDialogClose} jobDetails={jobDetailsFromCompany} />
+            {minExp && (
+              <ExperienceContainer>
+                <Typography variant="body2" fontWeight="bold">
+                  Minimum Experience
+                </Typography>
+                <Typography variant="body2">{minExp} years</Typography>
+              </ExperienceContainer>
+            )}
+          </InfoContainer>
+
+          <ButtonContainer>
+          <Button
+            variant="contained"
+            color="primary"
+            href={jdLink}
+            target="_blank"
+            style={{ marginTop: '8px' }}
+          >
+            Easy Apply
+          </Button>
+        </ButtonContainer>
+        </CardContentWrapper>
+
+        
+      </JobCardWrapper>
+      <JobDetailsDialog
+        open={openDialog}
+        handleClose={handleDialogClose}
+        jobDetails={jobDetailsFromCompany}
+      />
     </>
   );
 };

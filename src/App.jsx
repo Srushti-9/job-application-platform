@@ -9,7 +9,7 @@ const JobContainer = styled('div')({
   display: 'flex',
   flexWrap: 'wrap',
   padding: '0 16px', // Add left and right padding to the container
-  justifyContent: 'center'
+  justifyContent: 'center',
 });
 
 const App = () => {
