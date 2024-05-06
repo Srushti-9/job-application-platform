@@ -22,7 +22,7 @@ const App = () => {
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [filters, setFilters] = useState({}); // State to store filter values
 
-    // useEffect to refetch data when filters change
+  // useEffect to refetch data when filters change
   useEffect(() => {
     fetchData(); // Refetch data
   }, [filters]);
@@ -64,7 +64,7 @@ const App = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ limit: 10, offset}),
+          body: JSON.stringify({ limit: 10, offset }),
         }
       );
       const data = await response.json();
@@ -88,13 +88,19 @@ const App = () => {
     let filtered = [...jobs];
     // Apply filters
     if (filters.minExp) {
-      filtered = filtered.filter(job => job.minExp >= filters.minExp);
+      filtered = filtered.filter((job) => job.minExp >= filters.minExp);
     }
     if (filters.companyName) {
-      filtered = filtered.filter(job => job.companyName.toLowerCase().includes(filters.companyName.toLowerCase()));
+      filtered = filtered.filter((job) =>
+        job.companyName
+          .toLowerCase()
+          .includes(filters.companyName.toLowerCase())
+      );
     }
     if (filters.location) {
-      filtered = filtered.filter(job => job.location.toLowerCase().includes(filters.location.toLowerCase()));
+      filtered = filtered.filter((job) =>
+        job.location.toLowerCase().includes(filters.location.toLowerCase())
+      );
     }
     // Update filtered jobs state
     setFilteredJobs(filtered);
@@ -111,21 +117,22 @@ const App = () => {
   };
 
   // Filter jobs based on user input
-const handleApplyFilters = (filters) => {
-  // Update filters state
-  setFilters(filters);
-};
+  const handleApplyFilters = (filters) => {
+    // Update filters state
+    setFilters(filters);
+  };
 
-const filtersApplied = () => {
+  const filtersApplied = () => {
     // Check if any filters are applied
-    return Object.values(filters).some(value => value !== '');
+    return Object.values(filters).some((value) => value !== '');
   };
 
   return (
     <ThemeProvider theme={theme}>
       <div>
         <h1>Job Listings</h1>
-        <Filters onApplyFilters={handleApplyFilters} /> {/* Pass filter handler to Filters component */}
+        <Filters onApplyFilters={handleApplyFilters} />{' '}
+        {/* Pass filter handler to Filters component */}
         <JobContainer>
           {filteredJobs.map((job, index) => (
             <JobCard key={index} job={job} />
