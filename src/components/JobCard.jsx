@@ -183,19 +183,17 @@ const JobCard = ({ job }) => {
           </InfoContainer>
 
           <ButtonContainer>
-          <Button
-            variant="contained"
-            color="primary"
-            href={jdLink}
-            target="_blank"
-            style={{ marginTop: '8px' }}
-          >
-            Easy Apply
-          </Button>
-        </ButtonContainer>
+            <Button
+              variant="contained"
+              color="primary"
+              href={jdLink}
+              target="_blank"
+              style={{ marginTop: '8px' }}
+            >
+              Easy Apply
+            </Button>
+          </ButtonContainer>
         </CardContentWrapper>
-
-        
       </JobCardWrapper>
       <JobDetailsDialog
         open={openDialog}
