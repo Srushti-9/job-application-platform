@@ -1,75 +1,127 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { TextField } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import '../styles/Filters.css';
+import debounce from 'lodash.debounce'; // Import debounce function from lodash
 
 const Filters = ({ onApplyFilters }) => {
-  const [minExperience, setMinExperience] = useState('');
+  const [minExp, setMinExp] = useState(null);
   const [companyName, setCompanyName] = useState('');
   const [location, setLocation] = useState('');
-  const [remoteOnly, setRemoteOnly] = useState(false);
+  const [remoteOnly, setRemoteOnly] = useState('');
   const [techStack, setTechStack] = useState('');
   const [jobRole, setRole] = useState('');
   const [minBasePay, setMinBasePay] = useState('');
 
-  const handleApplyFilters = () => {
-    const filters = {
-      minExperience,
+  useEffect(() => {
+    // Define a function to gather filter values
+    const gatherFilters = () => ({
+      minExp,
       companyName,
       location,
       remoteOnly,
       techStack,
       jobRole,
       minBasePay,
+    });
+
+    // Apply filters whenever any filter value changes, debounce the function to prevent excessive API calls
+    const applyFiltersDebounced = debounce(() => {
+      const filters = gatherFilters();
+      onApplyFilters(filters);
+    }, 300); // Adjust the delay as needed (in milliseconds)
+
+    // Watch for changes in filter values and apply filters
+    applyFiltersDebounced();
+
+    // Clean up to prevent memory leaks
+    return () => {
+      // Cancel the debounce function on unmount
+      applyFiltersDebounced.cancel();
     };
-    // Pass filters to parent component for further processing
-    onApplyFilters(filters);
-  };
+  }, [
+    minExp,
+    companyName,
+    location,
+    remoteOnly,
+    techStack,
+    jobRole,
+    minBasePay,
+  ]);
 
   return (
-    <div>
-      <input
-        type="text"
-        value={minExperience}
-        onChange={(e) => setMinExperience(e.target.value)}
-        placeholder="Min Experience"
-      />
-      <input
-        type="text"
-        value={companyName}
-        onChange={(e) => setCompanyName(e.target.value)}
-        placeholder="Company Name"
-      />
-      <input
-        type="text"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
-        placeholder="Location"
-      />
-      <label>
-        Remote Only:
-        <input
-          type="checkbox"
-          checked={remoteOnly}
-          onChange={() => setRemoteOnly(!remoteOnly)}
+    <div className="filters-container">
+      <div className="filter-row">
+        <Autocomplete
+          id="min-experience-select"
+          value={minExp || null}
+          onChange={(event, newValue) => {
+            setMinExp(newValue);
+          }}
+          sx={{ width: 150 }}
+          options={[...Array(10)].map((_, index) => String(index + 1))} // Convert numbers to strings
+          renderInput={(params) => <TextField {...params} label="Experience" />}
         />
-      </label>
-      <input
-        type="text"
-        value={techStack}
-        onChange={(e) => setTechStack(e.target.value)}
-        placeholder="Tech Stack"
-      />
-      <input
-        type="text"
-        value={jobRole}
-        onChange={(e) => setRole(e.target.value)}
-        placeholder="Role"
-      />
-      <input
-        type="text"
-        value={minBasePay}
-        onChange={(e) => setMinBasePay(e.target.value)}
-        placeholder="Min Base Pay"
-      />
-      <button onClick={handleApplyFilters}>Apply Filters</button>
+      </div>
+
+      <div className="filter-row">
+        <TextField
+          value={companyName}
+          onChange={(e) => setCompanyName(e.target.value)}
+          label="Company Name"
+          variant="outlined"
+        />
+      </div>
+      <div className="filter-row">
+        <TextField
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          label="Location"
+          variant="outlined"
+        />
+      </div>
+      <div className="filter-row">
+        <Autocomplete
+          id="remote-select"
+          value={remoteOnly || null}
+          onChange={(event, newValue) => {
+            setRemoteOnly(newValue);
+          }}
+          sx={{ width: 150 }}
+          options={['Remote', 'Hybrid', 'In-office']}
+          renderInput={(params) => <TextField {...params} label="Remote" />}
+        />
+      </div>
+      <div className="filter-row">
+        <TextField
+          value={techStack}
+          onChange={(e) => setTechStack(e.target.value)}
+          label="Tech Stack"
+          variant="outlined"
+        />
+      </div>
+      <div className="filter-row">
+        <TextField
+          value={jobRole}
+          onChange={(e) => setRole(e.target.value)}
+          label="Role"
+          variant="outlined"
+        />
+      </div>
+      <div className="filter-row">
+        <Autocomplete
+          id="min-base-pay-select"
+          value={minBasePay || null} // Set initial value to null
+          onChange={(event, newValue) => {
+            setMinBasePay(newValue); // Set to empty string if newValue is null
+          }}
+          sx={{ width: 150 }}
+          options={['0L', '10L', '20L', '30L', '40L', '50L', '60L', '70L']}
+          renderInput={(params) => (
+            <TextField {...params} label="Min Base Pay" />
+          )}
+        />
+      </div>
     </div>
   );
 };

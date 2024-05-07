@@ -88,7 +88,9 @@ const App = () => {
     let filtered = [...jobs];
     // Apply filters
     if (filters.minExp) {
-      filtered = filtered.filter((job) => job.minExp >= filters.minExp);
+      filtered = filtered.filter((job) => {
+        return job.minExp >= filters.minExp;
+      });
     }
     if (filters.companyName) {
       filtered = filtered.filter((job) =>
@@ -101,6 +103,24 @@ const App = () => {
       filtered = filtered.filter((job) =>
         job.location.toLowerCase().includes(filters.location.toLowerCase())
       );
+    }
+    // can add the filter - based on the value - currently, in api data we don't have the attr
+    // if (filters.remoteOnly !== null) {
+    //   filtered = filtered.filter((job) => job.remote === filters.remoteOnly);
+    // }
+
+    if (filters.jobRole) {
+      filtered = filtered.filter((job) =>
+        job.jobRole.toLowerCase().includes(filters.jobRole.toLowerCase())
+      );
+    }
+
+    if (filters.minBasePay) {
+      // Convert minBasePay filter value to a number before filtering
+      const minBasePayValue = parseInt(filters.minBasePay.replace('L', ''));
+      filtered = filtered.filter((job) => {
+        return job.minJdSalary >= minBasePayValue;
+      });
     }
     // Update filtered jobs state
     setFilteredJobs(filtered);
