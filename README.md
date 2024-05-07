@@ -45,7 +45,6 @@ git clone https://github.com/Srushti-9/job-application-platform.git
 2. Install dependencies:
 
 ```
-cd candidate-application-platform
 npm install
 ```
 
