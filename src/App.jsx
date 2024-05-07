@@ -3,8 +3,7 @@ import JobCard from './components/JobCard';
 import { styled } from '@mui/system';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Filters from './components/Filters';
-import JobCardSkeleton from './components/JobCardSkeleton'; // the skeleton component
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { Provider } from 'react-redux';
 import { store } from './redux/store'; // Import the Redux store
 import JobListings from './components/JobListings';
 import ScrollObserver from './components/ScrollObserver';

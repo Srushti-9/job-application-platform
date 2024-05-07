@@ -3,8 +3,12 @@ import { TextField } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import '../styles/Filters.css';
 import debounce from 'lodash.debounce'; // Import debounce function from lodash
+import { applyFilters } from '../redux/jobsSlice'; // Import the applyFilters action
+import { useDispatch } from 'react-redux';
 
-const Filters = ({ onApplyFilters }) => {
+const Filters = () => {
+  const dispatch = useDispatch(); // Initialize useDispatch hook
+
   const [minExp, setMinExp] = useState(null);
   const [companyName, setCompanyName] = useState('');
   const [location, setLocation] = useState('');
@@ -14,6 +18,7 @@ const Filters = ({ onApplyFilters }) => {
   const [minBasePay, setMinBasePay] = useState('');
 
   useEffect(() => {
+    //console.log("apply filters");
     // Define a function to gather filter values
     const gatherFilters = () => ({
       minExp,
@@ -27,8 +32,9 @@ const Filters = ({ onApplyFilters }) => {
 
     // Apply filters whenever any filter value changes, debounce the function to prevent excessive API calls
     const applyFiltersDebounced = debounce(() => {
+      //console.log("apply filters 1");
       const filters = gatherFilters();
-      onApplyFilters(filters);
+      dispatch(applyFilters(filters)); // Dispatch applyFilters action with filter values
     }, 300); // Adjust the delay as needed (in milliseconds)
 
     // Watch for changes in filter values and apply filters
@@ -40,6 +46,7 @@ const Filters = ({ onApplyFilters }) => {
       applyFiltersDebounced.cancel();
     };
   }, [
+    dispatch,
     minExp,
     companyName,
     location,

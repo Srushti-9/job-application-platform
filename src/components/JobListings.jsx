@@ -16,6 +16,11 @@ const JobContainer = styled('div')({
   flexWrap: 'wrap',
   padding: '0 16px', // Add left and right padding to the container
   justifyContent: 'center',
+  // Media query for mobile devices
+  '@media (max-width: 600px)': {
+    flexDirection: 'column',
+    alignItems: 'center', // Align items to center vertically
+  },
 });
 
 const JobListings = () => {

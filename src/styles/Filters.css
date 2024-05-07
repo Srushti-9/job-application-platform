@@ -14,7 +14,8 @@
 }
 
 @media (max-width: 600px) {
-  .filter-row {
+  .filter-row,
+  .filters-container {
     flex-direction: column;
   }
 }

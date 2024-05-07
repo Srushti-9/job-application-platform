@@ -25,6 +25,9 @@ const JobCardWrapper = styled(Card)(({ theme }) => ({
     marginRight: theme.spacing(6),
     marginBottom: theme.spacing(4),
   },
+  [theme.breakpoints.down('md')]: {
+    width: '90%',
+  },
 }));
 
 const CardContentWrapper = styled(CardContent)(({ theme }) => ({
